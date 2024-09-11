@@ -1,0 +1,146 @@
+function Som(v1, v2){
+  return [v1[0] + v2[0], v1[1] + v2[1]]
+}
+
+function Sub(v1, v2){
+  return [v1[0] - v2[0], v1[1] - v2[1]]
+}
+
+function Inv(v){
+  return [-v[0], -v[1]]
+}
+
+function Compr(v){
+  return sqrt(v[0] * v[0] + v[1] * v[1])
+}
+
+function Esc(v1, v2){
+  return ( v1[0]*v2[0] + v1[1]*v2[1] )
+}
+
+function Vet(v1, v2){
+  return ( v1[0]*v2[1] - v1[1]*v2[0] )
+}
+
+function Proj(v1, v2){
+  let V1V2 = Esc(v1,v2)
+  let V2V2 = Compr(v2) * Compr(v2)
+  let V1V2eV2V2 = V1V2/V2V2
+  return [v2[0] * V1V2eV2V2, v2[1] * V1V2eV2V2]
+}
+
+function Des(v1, v2){
+  let u = Som(v1, v2)
+  return [v2[0], v2[1], u[0], u[1]]
+}
+
+function Ref(v1, v2){
+  let u = Proj(v1, v2)
+  let u2 = [u[0] * 2, u[1] * 2] 
+  return Sub(u2, v1)
+}
+//
+
+let v1
+let v2
+let v3
+
+function setup(){
+  createCanvas(400,400)
+  
+  v1 = [10, 100]
+  v2 = [100, 10]
+
+}
+
+function draw(){
+  goCartesian()  
+
+  colore(0)
+  
+  seta(0, 0, v1[0], v1[1])
+  seta(0, 0, v2[0], v2[1])
+  
+  //Soma
+  //v3 = Som(v1, v2)
+  //seta(0, 0, v3[0], v3[1])
+  
+  //Subtração
+  //v3 = Sub(v1, v2)
+  //seta(0, 0, v3[0], v3[1])
+  
+  //Inverso
+  //v3 = Inv(v1)
+  //seta(0, 0, v3[0], v3[1])
+  
+  //Produto Escalar
+  //print(Esc(v1, v2))
+  
+  //Produto Vetorial
+  //print(Vet(v1, v2))
+
+  //Projeção
+  //v3 = Proj(v1, v2)
+  //seta(0, 0, v3[0], v3[1])
+  
+  //Reflexão
+  //v3 = Ref(v1, v2)
+  //seta(0, 0, v3[0], v3[1])
+  
+  //Deslizar?
+  //v3 = Des(v1, v2)
+  //seta(v3[0], v3[1], v3[2], v3[3])
+}
+
+function goCartesian()
+{
+  background(255)
+  
+  colore(128,0,0)
+  seta(0,height/2,width, height/2)
+  colore(0,128,0)
+  seta(width/2,height,width/2, 0)
+  
+  translate(width/2,height/2)
+  scale(1,-1,1)  
+}
+
+function colore(c1,c2,c3,c4)
+{
+  if(c4 != null)
+  {
+    fill(c1,c2,c3,c4)
+    stroke(c1,c2,c3,c4)
+    return
+  }
+  if(c3 != null)
+  {
+    fill(c1,c2,c3)
+    stroke(c1,c2,c3)
+    return
+  }
+  
+  if(c2 == null )
+  {
+    fill(c1)
+    stroke(c1)
+  }
+  else
+  {
+    fill(c1,c1,c1,c2)
+    stroke(c1,c1,c1,c2)
+  }    
+}
+    
+function seta(x1,y1,x2,y2)
+{
+  line(x1,y1,x2,y2)
+  var dx = x2-x1, dy = y2-y1
+  var le = sqrt(dx*dx + dy*dy)
+  var vx = dx/le, vy = dy/le
+  var ux = -vy
+  var uy = vx
+  triangle(x2,y2,
+           x2-5*vx+2*ux, y2-5*vy+2*uy,
+           x2-5*vx-2*ux, y2-5*vy-2*uy)
+}

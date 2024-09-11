@@ -1,0 +1,101 @@
+function Som(v1, v2){
+  return [v1[0] + v2[0], v1[1] + v2[1]]
+}
+
+let v1
+let v2
+let v3
+let v4
+let ordem
+
+function setup(){
+  createCanvas(400,400)
+  
+  v1 = [random(-100, 100), random(-100, 100)]
+  v2 = [random(-100, 100), random(-100, 100)]
+  v3 = [random(-100, 100), random(-100, 100)]
+  v4 = [random(-100, 100), random(-100, 100)]
+  
+  ordem = [v1, v2, v3, v4];
+  
+  setInterval(embaralharOrdem, 3000);
+
+}
+
+function draw(){
+  goCartesian()  
+
+  let comeco = [0, 0]; 
+  let soma = [0, 0];   
+
+  // Desenhar os vetores no final do anterior
+  for (let i = 0; i < ordem.length; i++) {
+    let fim = Som(comeco, ordem[i]);
+    colore(0)
+    seta(comeco[0], comeco[1], fim[0], fim[1]);
+    comeco = fim; 
+  }
+  
+  // Desenhar o vetor resultante
+  soma = comeco;  
+  colore(255, 0, 255);
+  seta(0, 0, soma[0], soma[1]); 
+  
+}
+
+function embaralharOrdem() {
+  ordem = shuffle(ordem);
+}
+
+function goCartesian()
+{
+  background(255)
+  
+  colore(128,0,0)
+  seta(0,height/2,width, height/2)
+  colore(0,128,0)
+  seta(width/2,height,width/2, 0)
+  
+  translate(width/2,height/2)
+  scale(1,-1,1)  
+}
+
+function colore(c1,c2,c3,c4)
+{
+  if(c4 != null)
+  {
+    fill(c1,c2,c3,c4)
+    stroke(c1,c2,c3,c4)
+    return
+  }
+  if(c3 != null)
+  {
+    fill(c1,c2,c3)
+    stroke(c1,c2,c3)
+    return
+  }
+  
+  if(c2 == null )
+  {
+    fill(c1)
+    stroke(c1)
+  }
+  else
+  {
+    fill(c1,c1,c1,c2)
+    stroke(c1,c1,c1,c2)
+  }    
+}
+    
+function seta(x1,y1,x2,y2)
+{
+  line(x1,y1,x2,y2)
+  var dx = x2-x1, dy = y2-y1
+  var le = sqrt(dx*dx + dy*dy)
+  var vx = dx/le, vy = dy/le
+  var ux = -vy
+  var uy = vx
+  triangle(x2,y2,
+           x2-5*vx+2*ux, y2-5*vy+2*uy,
+           x2-5*vx-2*ux, y2-5*vy-2*uy)
+}
